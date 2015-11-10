@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      var socketio = io.connect('Barons-iMac.local:1337');
+
+      socketio.on('message_to_client', function(data) {
+        document.getElementById('chatlog').innerHTML = ('<hr/>' + '<strong>' + data['username'] + ': </strong>' + data['message'] + document.getElementById('chatlog').innerHTML);
+      });
+
+      function sendMessage() {
+        var username = document.getElementById('username_input').value,
+        msg_el = document.getElementById('message_input'),
+        msg = msg_el.value;
+
+        socketio.emit('message_to_server', { message: msg, username: username });
+        msg_el.value = '';
+      }
+    </script>
+  </head>
+  <body>
+    <input type="text" id="username_input" placeholder='Username' />
+    <input type="text" id="message_input"/>
+    <button onclick="sendMessage()">send</button>
+    <div id="chatlog"></div>
+  </body>
+</html>
